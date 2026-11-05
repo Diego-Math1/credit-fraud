@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: int_transaction_features
+    description: >
+      Features temporais por transação: velocity (1h/24h/7d), deviation (últimas 30)
+      e recency. Sem `is_fraud` por design (evitar leakage).
+    columns:
+      - name: transaction_id
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_key
+        data_tests:
+          - not_null
+      - name: txn_count_1h
+        data_tests:
+          - not_null
+      - name: amount_deviation_ratio
+        description: "Nullable para a 1ª transação de cada cliente (sem histórico)."

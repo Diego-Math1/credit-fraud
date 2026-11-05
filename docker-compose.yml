@@ -1,0 +1,53 @@
+# docker-compose.yml
+services:
+  postgres:
+    image: postgres:16
+    container_name: credit_fraud_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: credit_fraud
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d credit_fraud"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dbt:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dbt
+    container_name: credit_fraud_dbt
+    profiles: ["tasks"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    
+    environment:
+      DBT_PROFILES_DIR: /usr/app/dbt_project
+      DBT_TARGET: dev
+
+    volumes:
+      - ./dbt_project:/usr/app/dbt_project
+    entrypoint: ["dbt"]
+    command: ["build"]
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: credit_fraud_api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/credit_fraud
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

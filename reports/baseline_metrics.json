@@ -1,0 +1,26 @@
+{
+  "model": "baseline_logistic_regression",
+  "train": {
+    "pr_auc": 0.11499144745632692,
+    "roc_auc": 0.7599239170158324,
+    "recall_p90": 0.0,
+    "accuracy": 0.7814155567059689
+  },
+  "val": {
+    "pr_auc": 0.1310196548348162,
+    "roc_auc": 0.7575806665547109,
+    "recall_p90": 0.0,
+    "accuracy": 0.8212483489687404
+  },
+  "test": {
+    "pr_auc": 0.09866113319424992,
+    "roc_auc": 0.7543805513748467,
+    "recall_p90": 0.0,
+    "accuracy": 0.7955769295898669
+  },
+  "class_balance": {
+    "n_fraud": 20663,
+    "n_legit": 569877,
+    "imbalance_ratio": 27.579586700866283
+  }
+}

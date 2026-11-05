@@ -1,0 +1,36 @@
+# Ambiente Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Requirements
+# (mantenha requirements.txt e requirements-dev.txt versionados)
+
+# Dados
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Modelos e artefatos
+models/*
+!models/.gitkeep
+mlruns/
+*.joblib
+*.pkl
+
+# dbt
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+dbt_project/.user.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Docker
+*.env
+.env

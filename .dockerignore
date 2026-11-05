@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+data/
+models/
+mlruns/
+notebooks/
+reports/
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+.env

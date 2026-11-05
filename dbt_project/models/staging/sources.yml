@@ -1,0 +1,23 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: "Dados brutos do IEEE-CIS Fraud Detection, carregados via COPY."
+    tables:
+      - name: train_transactions
+        description: "Uma linha por transação. Contém isFraud (target) e TransactionDT."
+        columns:
+          - name: TransactionID
+            quote: true          # ← força "TransactionID" (mixed case)
+            data_tests:
+              - unique
+              - not_null
+      - name: train_identity
+        description: "Presente em ~24% das transações. Join por TransactionID."
+        columns:
+          - name: TransactionID
+            quote: true          # ← idem
+            data_tests:
+              - unique
+              - not_null

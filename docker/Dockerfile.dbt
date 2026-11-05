@@ -1,0 +1,46 @@
+# docker/Dockerfile.dbt
+# syntax=docker/dockerfile:1.7
+ARG PYTHON_VERSION=3.11
+ARG DBT_CORE_VERSION=1.8.*
+ARG DBT_POSTGRES_VERSION=1.8.*
+
+FROM python:${PYTHON_VERSION}-slim AS builder
+
+ARG DBT_CORE_VERSION
+ARG DBT_POSTGRES_VERSION
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --user --no-cache-dir \
+    dbt-core==${DBT_CORE_VERSION} \
+    dbt-postgres==${DBT_POSTGRES_VERSION}
+
+# -------- Runtime stage --------
+FROM python:${PYTHON_VERSION}-slim
+
+ARG DBT_CORE_VERSION
+ARG DBT_POSTGRES_VERSION
+
+# git é dependência de runtime do dbt (deps, adapters, debug check)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -g 10001 appgroup && \
+    useradd -u 10001 -g appgroup -s /bin/bash -m appuser
+
+COPY --from=builder /root/.local /home/appuser/.local
+ENV PATH="/home/appuser/.local/bin:${PATH}"
+
+WORKDIR /usr/app/dbt_project
+
+
+# Copie o projeto dbt (será montado via volume no compose, mas copiamos para a imagem também)
+COPY --chown=appuser:appgroup dbt_project/ /usr/app/dbt_project/
+
+USER appuser
+
+ENTRYPOINT ["dbt"]
+CMD ["--version"]

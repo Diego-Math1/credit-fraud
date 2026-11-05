@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: fct_fraud_training
+    description: >
+      Dataset final para treino de modelos de fraude. Junta features temporais
+      (int_transaction_features) com o target (is_fraud) e faz split temporal
+      train/val/test (70/15/15). O split é por tempo — nunca aleatório — para
+      evitar leakage entre folds.
+    columns:
+      - name: transaction_id
+        data_tests:
+          - unique
+          - not_null
+      - name: split
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['train', 'val', 'test']
+      - name: is_fraud
+        data_tests:
+          - not_null

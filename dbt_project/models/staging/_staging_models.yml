@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_transactions
+    description: "Transações normalizadas, com timestamp real e target is_fraud."
+    columns:
+      - name: transaction_id
+        data_tests:
+          - unique
+          - not_null
+      - name: is_fraud
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: transaction_at
+        data_tests:
+          - not_null
+
+  - name: stg_identity
+    description: "Identidade do dispositivo, presente em uma minoria das transações."
+    columns:
+      - name: transaction_id
+        data_tests:
+          - unique
+          - not_null

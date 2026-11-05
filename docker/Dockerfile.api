@@ -1,0 +1,26 @@
+# docker/Dockerfile.api
+# syntax=docker/dockerfile:1.7
+ARG PYTHON_VERSION=3.11
+
+FROM python:${PYTHON_VERSION}-slim AS builder
+
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# -------- Runtime stage --------
+FROM python:${PYTHON_VERSION}-slim
+
+RUN groupadd -g 10001 appgroup && \
+    useradd -u 10001 -g appgroup -s /bin/bash -m appuser
+
+WORKDIR /app
+
+COPY --from=builder /root/.local /home/appuser/.local
+ENV PATH="/home/appuser/.local/bin:${PATH}"
+
+COPY --chown=appuser:appgroup src/ ./src/
+
+USER appuser
+EXPOSE 8000
+CMD ["uvicorn", "src.serving.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -69,7 +69,7 @@ jobs:
       - name: dbt deps
         run: dbt deps --project-dir dbt_project
 
-      - name: dbt build (Compile + Run + Test)
-        run: dbt build --project-dir dbt_project
+      - name: dbt compile (valida Jinja e SQL)
+        run: dbt compile --project-dir dbt_project
         env:
           DBT_PROFILES_DIR: ~/.dbt

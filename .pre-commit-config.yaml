@@ -1,0 +1,38 @@
+# .pre-commit-config.yaml
+repos:
+  # Hooks genéricos (sanity check de arquivos)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace        # remove espaços no fim da linha
+      - id: end-of-file-fixer          # garante newline no fim
+      - id: check-yaml                 # valida sintaxe YAML
+      - id: check-toml                 # valida sintaxe TOML
+      - id: check-added-large-files    # bloqueia arquivos > 500KB
+        args: ['--maxkb=500']
+      - id: check-merge-conflict       # detecta conflitos não resolvidos
+      - id: detect-private-key         # bloqueia chaves privadas commitadas
+
+  # Linter + auto-fix de Python
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff                       # lint
+        args: [--fix]                  # auto-fix imports não usados, variáveis
+      - id: ruff-format                # formatação (substitui black)
+
+  # Lint de SQL (dbt models)
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 3.1.0
+    hooks:
+      - id: sqlfluff-lint
+        files: ^dbt_project/models/.*\.sql$
+        additional_dependencies:
+          - 'sqlfluff-templater-dbt'
+          - 'dbt-core==1.8.*'
+          - 'dbt-postgres==1.8.*'
+        args:
+          - '--dialect'
+          - 'postgres'
+          - '--exclude-rules'
+          - 'LT01,LT02,LT03,LT05,LT09,ST06,ST07,AL01'

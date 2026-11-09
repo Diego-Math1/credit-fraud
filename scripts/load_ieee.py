@@ -5,8 +5,8 @@ import sys
 from pathlib import Path
 
 import psycopg2
-from psycopg2 import sql
 from dotenv import load_dotenv
+from psycopg2 import sql
 
 load_dotenv()
 
@@ -40,9 +40,7 @@ def infer_column_types(header_row):
 
 def create_table(conn, table_name, header_row):
     columns = infer_column_types(header_row)
-    cols_ddl = ", ".join(
-        f'"{col}" {typ}' for col, typ in zip(header_row, columns)
-    )
+    cols_ddl = ", ".join(f'"{col}" {typ}' for col, typ in zip(header_row, columns, strict=False))
     with conn.cursor() as cur:
         cur.execute(f'DROP TABLE IF EXISTS raw."{table_name}";')
         cur.execute(f'CREATE TABLE raw."{table_name}" ({cols_ddl});')
@@ -55,17 +53,17 @@ def load_csv(conn, csv_path, table_name):
     if not csv_path.exists():
         raise FileNotFoundError(f"CSV não encontrado: {csv_path}")
 
-    with open(csv_path, "r", encoding="utf-8", newline="") as f:
+    with open(csv_path, encoding="utf-8", newline="") as f:
         reader = csv.reader(f)
         header = next(reader)
 
     create_table(conn, table_name, header)
 
     copy_sql = sql.SQL(
-        'COPY raw.{} FROM STDIN WITH (FORMAT csv, HEADER true, DELIMITER \',\')'
+        "COPY raw.{} FROM STDIN WITH (FORMAT csv, HEADER true, DELIMITER ',')"
     ).format(sql.Identifier(table_name))
 
-    with open(csv_path, "r", encoding="utf-8", newline="") as f, conn.cursor() as cur:
+    with open(csv_path, encoding="utf-8", newline="") as f, conn.cursor() as cur:
         cur.copy_expert(copy_sql, f)
     conn.commit()
 

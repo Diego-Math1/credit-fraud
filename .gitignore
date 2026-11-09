@@ -34,3 +34,8 @@ dbt_project/.user.yml
 # Docker
 *.env
 .env
+
+# MLflow e artefatos de modelo
+mlruns/
+preprocessor.joblib
+*.joblib

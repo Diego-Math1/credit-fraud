@@ -1,5 +1,4 @@
 # docker/Dockerfile.api
-# syntax=docker/dockerfile:1.7
 ARG PYTHON_VERSION=3.11
 
 FROM python:${PYTHON_VERSION}-slim AS builder
@@ -19,8 +18,16 @@ WORKDIR /app
 COPY --from=builder /root/.local /home/appuser/.local
 ENV PATH="/home/appuser/.local/bin:${PATH}"
 
+# Copia código + artefatos
 COPY --chown=appuser:appgroup src/ ./src/
+COPY --chown=appuser:appgroup mlruns/ ./mlruns/
+COPY --chown=appuser:appgroup preprocessor.joblib ./preprocessor.joblib
 
 USER appuser
+
+ENV MLFLOW_TRACKING_URI=file:///app/mlruns
+ENV MODEL_NAME=fraud_scoring_xgb
+ENV MODEL_STAGE=latest
+
 EXPOSE 8000
 CMD ["uvicorn", "src.serving.main:app", "--host", "0.0.0.0", "--port", "8000"]

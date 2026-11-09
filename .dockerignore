@@ -5,10 +5,17 @@ __pycache__
 *.pyc
 data/
 models/
-mlruns/
 notebooks/
 reports/
 dbt_project/target/
 dbt_project/logs/
 dbt_project/dbt_packages/
 .env
+# Dados e notebooks (não usados em produção)
+data/
+notebooks/
+reports/
+dbt_project/
+.git
+.venv
+__pycache__

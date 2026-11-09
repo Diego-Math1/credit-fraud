@@ -84,11 +84,9 @@ select
     amount_std_last30,
     case when amount_avg_last30 > 0
          then amount / amount_avg_last30
-         else null
     end as amount_deviation_ratio,
     case when amount_std_last30 > 0
          then (amount - amount_avg_last30) / amount_std_last30
-         else null
     end as amount_zscore_last30,
 
     extract(epoch from (transaction_at - prev_txn_at)) as seconds_since_prev_txn

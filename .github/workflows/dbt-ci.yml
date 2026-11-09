@@ -13,11 +13,11 @@ on:
       - ".github/workflows/dbt-ci.yml"
 
 jobs:
-  dbt-build:
+  dbt-compile:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    # Sobe um Postgres temporário para o dbt usar
+    # Sobe o Postgres temporário
     services:
       postgres:
         image: postgres:16
@@ -46,12 +46,14 @@ jobs:
       - name: Install dbt
         run: |
           python -m pip install --upgrade pip
-          pip install dbt-postgres==1.8.*
+          # Forçando a versão exata para evitar o dbt 2.0 (pre-release)
+          pip install dbt-core==1.8.10 dbt-postgres==1.8.10
 
       - name: Create profiles.yml for CI
         run: |
-          mkdir -p ~/.dbt
-          cat > ~/.dbt/profiles.yml <<EOF
+          # Cria a pasta na raiz do projeto (mais seguro que ~/.dbt no Actions)
+          mkdir -p profiles
+          cat > profiles/profiles.yml <<EOF
           credit_fraud:
             target: dev
             outputs:
@@ -68,8 +70,10 @@ jobs:
 
       - name: dbt deps
         run: dbt deps --project-dir dbt_project
+        env:
+          DBT_PROFILES_DIR: ${{ github.workspace }}/profiles
 
-      - name: dbt compile (valida Jinja e SQL)
+      - name: dbt compile
         run: dbt compile --project-dir dbt_project
         env:
-          DBT_PROFILES_DIR: ~/.dbt
+          DBT_PROFILES_DIR: ${{ github.workspace }}/profiles

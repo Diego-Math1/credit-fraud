@@ -1,0 +1,2 @@
+model_name: fraud_scoring_xgb
+model_version: '5'

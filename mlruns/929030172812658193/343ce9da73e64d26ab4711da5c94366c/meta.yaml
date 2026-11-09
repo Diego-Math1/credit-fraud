@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/diego.nascimento/Documents/credit-fraud-platform/mlruns/929030172812658193/343ce9da73e64d26ab4711da5c94366c/artifacts
+end_time: 1793971923277
+entry_point_name: ''
+experiment_id: '929030172812658193'
+lifecycle_stage: active
+run_id: 343ce9da73e64d26ab4711da5c94366c
+run_name: xgb_calibrated_no_if
+run_uuid: 343ce9da73e64d26ab4711da5c94366c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1793971893026
+status: 3
+tags: []
+user_id: diego.nascimento

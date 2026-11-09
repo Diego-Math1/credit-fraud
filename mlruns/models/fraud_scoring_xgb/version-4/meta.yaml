@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1793971978343
+current_stage: None
+description: null
+last_updated_timestamp: 1793971978343
+name: fraud_scoring_xgb
+run_id: c6b76633202049b8b92973a071b5a187
+run_link: null
+source: file:///C:/Users/diego.nascimento/Documents/credit-fraud-platform/mlruns/929030172812658193/c6b76633202049b8b92973a071b5a187/artifacts/model
+status: READY
+status_message: null
+storage_location: file:///C:/Users/diego.nascimento/Documents/credit-fraud-platform/mlruns/929030172812658193/c6b76633202049b8b92973a071b5a187/artifacts/model
+user_id: null
+version: 4

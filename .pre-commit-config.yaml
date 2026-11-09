@@ -1,27 +1,25 @@
-# .pre-commit-config.yaml
 repos:
-  # Hooks genéricos (sanity check de arquivos)
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-      - id: trailing-whitespace        # remove espaços no fim da linha
-      - id: end-of-file-fixer          # garante newline no fim
-      - id: check-yaml                 # valida sintaxe YAML
-      - id: check-toml                 # valida sintaxe TOML
-      - id: check-added-large-files    # bloqueia arquivos > 500KB
-        args: ['--maxkb=500']
-      - id: check-merge-conflict       # detecta conflitos não resolvidos
-      - id: detect-private-key         # bloqueia chaves privadas commitadas
+      - id: trailing-whitespace
+        exclude: ^mlruns/
+      - id: end-of-file-fixer
+        exclude: ^mlruns/
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+        args: ['--maxkb=1500']  # Aumentado para 1.5MB para aceitar o modelo.pkl
+      - id: check-merge-conflict
+      - id: detect-private-key
 
-  # Linter + auto-fix de Python
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.6.9
     hooks:
-      - id: ruff                       # lint
-        args: [--fix]                  # auto-fix imports não usados, variáveis
-      - id: ruff-format                # formatação (substitui black)
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
 
-  # Lint de SQL (dbt models)
   - repo: https://github.com/sqlfluff/sqlfluff
     rev: 3.1.0
     hooks:

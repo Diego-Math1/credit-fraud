@@ -36,6 +36,11 @@ dbt_project/.user.yml
 .env
 
 # MLflow e artefatos de modelo
-mlruns/
-preprocessor.joblib
+mlruns/*
+!mlruns/929030172812658193/
+!mlruns/929030172812658193/**
+!mlruns/models/
+!mlruns/models/**
 *.joblib
+!preprocessor.joblib
+*.pkl

@@ -142,10 +142,6 @@ Testes dbt: Testes genéricos (unique, not_null) e singulares (ex: garantia de q
 
 A organização do projeto separa as responsabilidades de engenharia de dados (dbt), ciência de dados (notebooks) e engenharia de software (API).
 
-## 📁 Estrutura do Repositório
-
-A organização do projeto separa as responsabilidades de engenharia de dados (dbt), ciência de dados (notebooks) e engenharia de software (API).
-
 ```text
 .
 ├── .github/workflows/    # Pipelines CI (GitHub Actions para API e dbt)
